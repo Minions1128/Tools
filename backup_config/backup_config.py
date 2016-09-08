@@ -4,56 +4,101 @@ from 0files\sw.txt backup running configurations to
 """
 
 import ciscolib
-import getpass
+import time
+# import getpass
 
 def main():
-	Password = "cisco"
-	UserName = "admin"
-	Enable_PWD = ""
+    _password = "cisco"
+    _username = "admin"
+    _enable_pwd = ""
 
-	UserName = raw_input("Pleause input username:")
-	Password = getpass.getpass("Password:")
+    # UserName = raw_input("Pleause input username:")
+    # Password = getpass.getpass("Password:")
 
-	fail_device = []
-	total_count = 0
-	suc_count = 0
-	fail_count = 0
+    total_count, suc_count, fail_count = 0, 0, 0
+    fail_info = {}
+    succ_ip = []
+    _l_time = time.strftime("%y%m%d%H%M%S", time.localtime())
 
-	for ip in open('0files\\sw.txt').readlines():
-		total_count += 1
-		ip = ip.strip()
-		if UserName != "":
-			switch = ciscolib.Device( ip, Password, UserName, Enable_PWD )
-		else:
-			switch = ciscolib.Device( ip, Password, enable_password=Enable_PWD )
-		try:
-			switch.connect()
-			print ( "Logged into %s successfully." % ip )
+    f_log = open('0files\\'+_l_time+'_log_', 'w+')
 
-		except ciscolib.AuthenticationError as e:
-			print ( "Couldn't connect to %s: %s" % ( ip, e.value ) )
-			fail_device.append(ip)
-			fail_count += 1
-			continue
-		except Exception as e:
-			print ( "Couldn't connect to %s: %s$" % ( ip, str(e) ) )
-			fail_device.append(ip)
-			fail_count += 1
-			continue
+    for ip in open('0files\\sw.txt').readlines():
+        total_count += 1
+        ip = ip.strip()
+        f_log.write('\n'+ip)
+        if _username != "":
+            switch = ciscolib.Device(ip, _password, _username, _enable_pwd)
+        else:
+            switch = ciscolib.Device(ip, _password, enable_password=_enable_pwd)
+        try:
+            switch.connect()
+            temp_log = "\nLogged into %s successfully." % ip
+            f_log.write(temp_log)
+            print temp_log
 
-		switch.enable( Enable_PWD )
-#		print switch.cmd( "sh run" )
-		backup_file_path = "0files\\" + ip + ".txt"
-		f = open( backup_file_path, 'w+' )
-		f.write( switch.cmd( "sh run" ) )
-		f.close()
-		switch.disconnect()
-		suc_count += 1
-	print "ToTal: ", total_count
-	print "Success: ", suc_count
-	print "Fail: ", fail_count
-	print fail_device
-	raw_input("Press Enter to continue..")
+        except ciscolib.AuthenticationError as e:
+            temp_log = "\nCouldn't connect to %s: %s" % (ip, e.value)
+            print temp_log
+            f_log.write(temp_log)
+            fail_count += 1
+            fail_info[ip] = temp_log
+            continue
+        except Exception as e:
+            temp_log = "\nCouldn't connect to %s: %s$" % (ip, str(e))
+            f_log.write(temp_log)
+            print temp_log
+            fail_count += 1
+            fail_info[ip] = temp_log
+            continue
+
+        switch.enable(_enable_pwd)
+        # print switch.cmd("sh run")
+        backup_file_path = "0files\\" + _l_time + '_' + ip + ".txt"
+        f_bak_conf = open(backup_file_path, 'w+')
+        f_bak_conf.write(switch.cmd("sh run"))
+        f_bak_conf.close()
+        switch.disconnect()
+        suc_count += 1
+        succ_ip.append(ip)
+        temp_log = '\n' + ip + ' backup success'
+        f_log.write(temp_log)
+
+    temp_log = ('\n\n\n' +
+        '----------------------------------------------------\n' +
+        '**********             SubTotal           **********\n' +
+        '----------------------------------------------------')
+    f_log.write(temp_log)
+    print temp_log
+
+    temp_log = '\nTOTAL BACKUP ' + str(total_count)
+    f_log.write(temp_log)
+    print temp_log
+
+    temp_log = '\nSUCCESS BACKUP ' + str(suc_count)
+    f_log.write(temp_log)
+    print temp_log
+
+    temp_log = '\n' + str(succ_ip)
+    f_log.write(temp_log)
+    print temp_log
+
+    temp_log = '\nFAIL BACKUP ' + str(fail_count)
+    f_log.write(temp_log)
+    print temp_log
+
+    temp_log = ('\n\n\n' +
+        '----------------------------------------------------\n' +
+        '**********          FAIL DETAILS          **********\n' +
+        '----------------------------------------------------\n')
+    f_log.write(temp_log)
+
+    for i in fail_info:        
+        f_log.write(str(i))
+        f_log.write(str(fail_info[i]))
+        f_log.write('\n----------\n')
+
+    f_log.close()
+
 
 if __name__ == "__main__":
-	main()
+    main()
