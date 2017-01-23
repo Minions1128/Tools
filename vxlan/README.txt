@@ -44,3 +44,10 @@ Do the same configure on VM2
     ovs-vsctl add-port br1 eth0
     ifconfig br0 100.64.1.2/30 up
     ovs-vsctl add-port br0 vx1 -- set interface vx1 type=vxlan options:remote_ip=172.31.0.1
+
+Then, you ping VM1 and VM2 each other using 100.64.1.0/30.
+
+*If there is other futher applications need to use, change the MTU of each interface to 1450. The default value may be 1500.
+    echo "1450" > /sys/class/net/br0/mtu
+
+Using iperf or other testing tool to verify its connectivity.
