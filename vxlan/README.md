@@ -10,7 +10,7 @@ VLAN使用STP防止环路，VXLAN使用3层的方式，链路聚合、负载均�
 
 使用MAC in UDP的封装方式
 
-![]()
+![](https://github.com/Minions1128/Tools/blob/master/img/vxlan_packet_format.jpg)
 
 ## VTEP
 
@@ -21,10 +21,10 @@ IP接口有一个唯一的IP地址来标识VTEP设备，VTEP设备使用这个IP
 
 ### 点对点单播方式
 
-![]()
+![](https://github.com/Minions1128/Tools/blob/master/img/vxlan_unicast_forwarding_flow.jpg)
 
 ### 多点组播方式
 
-![]()
+![](https://github.com/Minions1128/Tools/blob/master/img/vxlan_mul_forwarding_flow.jpg)
 
 来源：http://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-729383.html
