@@ -22,12 +22,12 @@ We will create br0 and br1 on VM1
     ovs-vsctl add-br br0
     ovs-vsctl del-br br1
     ovs-vsctl add-br br1
-Clear the eth0, assign the IP of eth0 to br1, and add the default gateway.
-    ifconfig eth0 0 up
+Clear the eth0, assign the IP of eth0 to br1, and add the default gateway.[**]
+    ifconfig eth0 0 up
     ifconfig br1 172.31.0.1/24 up
     route add default gw 172.31.0.254
-Assign port eth0 to br1
-    ovs-vsctl add-port br1 eth0
+Assign port eth0 to br1.[**]
+    ovs-vsctl add-port br1 eth0
 Config the IP address, that the tunnel will use, to br0
     ifconfig br0 100.64.1.1/30 up
 Create interface vx1, add the interface to br0
@@ -49,5 +49,6 @@ Then, you can ping VM1 and VM2 each other using 100.64.1.0/30.
 
 *If there is other futher applications need to use, change the MTU of each interface to 1450. The default value may be 1500.
     echo "1450" > /sys/class/net/br0/mtu
+**In order to distinguish between control plane and data plane, we create two planes. Actually, only one ovs-bridge is needed.
 
 Using iperf or other testing tool to verify its connectivity.
