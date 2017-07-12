@@ -3,14 +3,9 @@ import re
 def is_mac(mac):
     if not mac or type(mac) not in [str, unicode]:
         return False
-    re_str = ur'^([\da-f]{4})(\.([\da-f]){4}){2}$|^([\da-f]{2})([-.:]([\da-f]){2}){5}$'
-                      
+    re_str = ur'^([\da-f]{4})(\.([\da-f]){4}){2}$|^([\da-f]{2})([-.:]([\da-f]){2}){5}$'                      
     ptn = re.compile(re_str, re.I)
-    if ptn.findall(mac):
-        return True
-    else:
-        return False
-
+    return True if ptn.findall(mac) else False
 
 print is_mac('AAaa.dddd.1111')
 print is_mac('4G-F0-2F-5C-08-A3')
