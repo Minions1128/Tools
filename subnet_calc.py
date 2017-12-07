@@ -68,5 +68,5 @@ def subnet_calc(ip, mask=-1, pre_len=-1):
     print 'Start host ip\t\t{}'.format('.'.join(start_ip_l))
     print 'End host ip\t\t\t{}'.format('.'.join(end_ip_l))
 
-
-subnet_calc(ip, mask=mask)
+if __name__ == '__main__':
+    subnet_calc(ip, mask=mask)
