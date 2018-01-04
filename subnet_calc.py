@@ -57,14 +57,14 @@ def subnet_calc(ip, mask=-1, pre_len=-1):
     for i in range(4):
         net_l.append(str(int(ip_l[i])&int(mask_l[i])))
         broadcast_l.append(str(int(net_l[i])|(int(wildcard_l[i]))))
-    start_ip_l = net_l
-    start_ip_l[-1] = str(int(net_l[-1]) + 1)
-    end_ip_l = broadcast_l
-    end_ip_l[-1] = str(int(broadcast_l[-1]) - 1)
     print 'IP address\t\t\t{}'.format(ip)
     print 'Sub net mask\t\t{}'.format(mask)
     print 'Network number\t\t{}'.format('.'.join(net_l))
     print 'Broadcast address\t{}'.format('.'.join(broadcast_l))
+    start_ip_l = net_l
+    start_ip_l[-1] = str(int(net_l[-1]) + 1)
+    end_ip_l = broadcast_l
+    end_ip_l[-1] = str(int(broadcast_l[-1]) - 1)
     print 'Start host ip\t\t{}'.format('.'.join(start_ip_l))
     print 'End host ip\t\t\t{}'.format('.'.join(end_ip_l))
 
