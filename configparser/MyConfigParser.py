@@ -16,6 +16,9 @@ class MyConfigParser(configparser.ConfigParser):
 
 def read_config(file):
     config = MyConfigParser()
+    # config = MyConfigParser(default_section='')
+    # default_section is 'DEFAULT' by default, modify DEFAULT is a normal section;
+    # default_section value is the special section holding default values for other sections and interpolation purposes.
     try:
         config.read_file(open(file))
     except configparser.DuplicateOptionError as e:
