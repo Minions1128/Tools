@@ -2,7 +2,13 @@
 # encoding: utf-8
 # https://github.com/python/cpython/blob/3.9/Lib/configparser.py
 
-import configparser
+if re.compile(r'^2.*').findall(sys.version):
+    import ConfigParser as configparser
+elif re.compile(r'^3.*').findall(sys.version):
+    import configparser
+else:
+    print("Not support python 4 or more.")
+    sys.exit(1)
 
 
 class MyConfigParser(configparser.ConfigParser):
@@ -12,6 +18,15 @@ class MyConfigParser(configparser.ConfigParser):
     def optionxform(self, optionstr):
         # return optionstr.lower()      # original
         return optionstr
+    
+    def read_file(self, *args, **kwargs):
+        if re.compile(r'^2.*').findall(sys.version):
+            return self.readfp(*args, **kwargs)
+        elif re.compile(r'^3.*').findall(sys.version):
+            return configparser.ConfigParser.read_file(self, *args, **kwargs)
+        else:
+            print("Not support python 4 or more.")
+            sys.exit(1)
 
 
 def read_config(file):
